@@ -1,6 +1,4 @@
-Here's a `README.md` file for your Discord music bot repository:
 
-```markdown
 # Discord Music Bot 🎶
 
 A simple Discord bot that joins a voice channel and plays music from YouTube based on search queries. The bot supports a music queue, looping, pausing, resuming, and stopping playback.
