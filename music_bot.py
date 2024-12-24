@@ -10,12 +10,10 @@ bot_token = os.getenv("DISCORD_BOT_TOKEN")
 
 if bot_token is None:
     raise ValueError("No bot token found.")
-# Set up Discord bot with command prefix
 intents = discord.Intents.default()
 intents.message_content = True
 bot = commands.Bot(command_prefix="!", intents=intents)
 
-# Configure yt_dlp and FFmpeg options
 ytdl_format_options = {
     'format': 'bestaudio/best',
     'noplaylist': 'True',
@@ -27,8 +25,8 @@ ytdl_format_options = {
     'nocheckcertificate': True,
     'ignoreerrors': False,
     'logtostderr': False,
-    'default_search': 'ytsearch',  # This will search on YouTube
-    'source_address': '0.0.0.0'  # Bind to IPv4
+    'default_search': 'ytsearch',
+    'source_address': '0.0.0.0'  
 }
 
 ffmpeg_options = {
@@ -37,7 +35,7 @@ ffmpeg_options = {
 
 ytdl = youtube_dl.YoutubeDL(ytdl_format_options)
 
-# Queue and loop flag
+
 song_queue = []
 is_looping = False
 
@@ -62,11 +60,11 @@ class YTDLSource(discord.PCMVolumeTransformer):
 async def play_next(ctx):
     """Plays the next song in the queue if there is one."""
     if is_looping and song_queue:
-        player = song_queue[0]  # Loop the current song
+        player = song_queue[0]  
     elif song_queue:
-        player = song_queue.pop(0)  # Pop the next song
+        player = song_queue.pop(0) 
     else:
-        return  # Stop if the queue is empty and not looping
+        return  
 
     ctx.voice_client.play(player, after=lambda e: asyncio.run_coroutine_threadsafe(play_next(ctx), bot.loop).result())
     await ctx.send(f"Now playing: {player.title}")
@@ -85,7 +83,7 @@ async def join(ctx):
 async def play(ctx, *, title: str):
     """Plays audio based on a search query."""
     if not ctx.voice_client:
-        await join(ctx)  # Joins if not already in a channel
+        await join(ctx)  
 
     async with ctx.typing():
         player = await YTDLSource.from_title(title, loop=bot.loop)
@@ -93,7 +91,7 @@ async def play(ctx, *, title: str):
             song_queue.append(player)
             await ctx.send(f"Added to queue: {player.title}")
 
-            # Start playing if not currently playing
+          
             if not ctx.voice_client.is_playing():
                 await play_next(ctx)
         else:
@@ -154,5 +152,5 @@ async def leave(ctx):
     else:
         await ctx.send("I'm not in a voice channel!")
 
-# Run the bot with your bot token
+
 bot.run(bot_token)
