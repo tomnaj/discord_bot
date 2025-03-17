@@ -103,6 +103,4 @@ This project is licensed under the MIT License.
 ---
 
 Happy listening! 🎧
-```
 
-Replace `"YOUR_BOT_TOKEN"` with your bot’s token, and make sure to update the clone URL in the installation instructions with your GitHub repository URL once you upload it.
